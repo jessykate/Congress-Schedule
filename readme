@@ -1,0 +1,7 @@
+Show what's being discussed in both houses of the US Congress, on the
+floor and in committees, today and coming up.
+
+Python Dependencies
+* BeautifulSoup
+* json or simplejson
+
