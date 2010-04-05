@@ -6,7 +6,7 @@ except:
     import simplejson as json
 
 from BeautifulSoup import BeautifulSoup
-import urllib2, sys
+import urllib2, sys, re
 
 
 class HouseFloorSchedule(object):
@@ -74,7 +74,9 @@ class HouseFloorSchedule(object):
     def get_html(self, date):
         ''' get the html markup corresponding to the schedule on the date specified'''
         fp = urllib2.urlopen(self.get_schedule_url(date))
-        self.soup = BeautifulSoup(fp.read())
+        # the converEntities argument will turn html entities like
+        # #&xxx; back into synbols.
+        self.soup = BeautifulSoup(fp.read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
 
     def get_schedule_url(self, date):
         # call this url with the start parameter equal to the number of
@@ -98,17 +100,17 @@ class HouseFloorSchedule(object):
     def get_start_meet(self):
         self.schedule['start_meet'] = (self.soup.table.findNext('tbody').findNext('table').
                                        findNext('tbody').findNext('tr').
-                                       findNext('strong').findNext('span').text)
+                                       findNext('strong').findNext('span').text.strip())
 
     def get_start_vote(self):
         self.schedule['start_vote'] = (self.soup.table.findNext('tbody').findNext('table').
                                        findNext('tbody').findNext('tr').findNext('strong').
-                                       findNext('strong').findNext('span').text)
+                                       findNext('strong').findNext('span').text.strip())
 
     def get_end_vote(self):
         self.schedule['end_vote'] = (self.soup.table.findNext('tbody').findNext('tbody').
                                      findNext('tr').findNext('td').findNext('strong').
-                                     findNext('strong').findNext('strong').text)
+                                     findNext('strong').findNext('strong').text.strip())
 
     def check_for_announcements(self, text):
         if self.announcements_prefix in text:
@@ -124,7 +126,6 @@ class HouseFloorSchedule(object):
         return False
 
     def add_to_agenda_item(self, item, text):
-
         # if it has a parent tag that is a list item then it's not a
         # section heading. (should add search for parent style that's
         # an "mso-list" such as on nov.6, 2009. 
@@ -133,24 +134,26 @@ class HouseFloorSchedule(object):
             # start a new (empty) schedule item.
             for heading in self.schedule_heading_prefixes:
                 if heading in text:
-                    self.schedule['agenda']['items'].append([])
+                    self.schedule['agenda']['items'].append('')
 
         # whatever the current schedule item, append the text to
         # it. if it was determined above to be a heading, then this
         # will be the first line for this item. else, it will just be
         # appended to the current item.
-        self.schedule['agenda']['items'].insert(-1, item.text)
+        self.schedule['agenda']['items'][-1] += ' '+text
 
     def get_agenda(self):
         self.schedule['agenda'] = {'announcements': [], 'items': [], 'footnotes': []}
         agenda = (self.soup.table.findNext('tbody').findNext('tr').
                   findNext('td').findNext('div', unselectable="off"))
-        for item in agenda.findAll('span'):
+
+        for line in agenda.findAll(text=True):   
             # normalize case and strip whitespace
-            text = item.text.lower().strip()
+            text = line.lower().strip()            
+            if not text: continue
             if not self.check_for_announcements(text):
                 if not self.check_for_footnotes(text):
-                    self.add_to_agenda_item(item, text)
+                    self.add_to_agenda_item(line, text)
 
 
 def senate_floor_current():
@@ -177,7 +180,8 @@ if __name__ == '__main__':
             if v['items']:
                 print "========== Agenda Items ============"
                 for item in v['items']:
-                    print item
+                    print 'Item:'
+                    print '\t'+item
 
             if v['footnotes']:
                 print "========== Footnote Items ============"
@@ -186,4 +190,3 @@ if __name__ == '__main__':
 
         else:
             print v
-            print ""
