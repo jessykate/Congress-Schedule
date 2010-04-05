@@ -4,7 +4,7 @@ from django.conf.urls.defaults import *
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('django.views.generic.simple',
-    (r'^$', 'direct_to_template', {'template': 'front_end/index.html'}),
+urlpatterns = patterns('',
+    url(r'^$', 'front_end.views.index', name='index'),
 
 )

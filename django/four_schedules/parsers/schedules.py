@@ -9,6 +9,9 @@ from BeautifulSoup import BeautifulSoup
 import urllib2, sys, re
 
 
+class SenateFloorSchedule(object):
+    pass
+
 class HouseFloorSchedule(object):
     def __init__(self, date='today'):
         ''' initializes a house floor schedule object with various

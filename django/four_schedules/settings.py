@@ -1,6 +1,11 @@
 # Django settings for four_schedules project.
 
-DEBUG = False
+import os
+
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # Language code for this installation. All choices can be found here:
@@ -42,12 +47,21 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'four_schedules.urls'
 
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'templates'),
+    os.path.join(PROJECT_ROOT, 'templates/front_end')
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'four_schedules.front_end',
+    'four_schedules.parsers',
 )
 
 try:
