@@ -1,0 +1,8 @@
+House Floor
+* detect "list items" that are actually mso-list class types. eg: 
+  http://majorityleader.gov/links_and_resources/whip_resources/dailyleader.cfm?pressReleaseID=4047
+* structure schedule subsections (Suspensions, Postponements, etc.)
+* pull out bill titles from links
+
+Senate Floor
+* um, implement
