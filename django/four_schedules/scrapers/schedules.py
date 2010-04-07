@@ -44,6 +44,9 @@ class HouseFloorSchedule(object):
                                           "h.res", 
                                           "h.j.res",     
                                           ]
+        # when building the agenda, we track if we're in suspensions
+        # or postponements. if not, the default is 'other'. 
+        self.current_agenda_subsection = 'other'
     
         # these appear to be at the bottom of each day's schedule. 
         self.schedule_footnotes = ["conference reports may be brought up at any time", 
@@ -137,16 +140,29 @@ class HouseFloorSchedule(object):
             # start a new (empty) schedule item.
             for heading in self.schedule_heading_prefixes:
                 if heading in text:
-                    self.schedule['agenda']['items'].append('')
+                    print 'heading found: %s' % text
+                    #self.schedule['agenda']['items'].append('')
+                    # check if we're in a subsection or not. 
+                    if 'postponed suspension' in text:
+                        self.current_agenda_subsection = 'postponements'
+                        #self.schedule['agenda']['postponements'].append('')
+                    elif 'suspension' in text: # this has to go second
+                        self.current_agenda_subsection = 'suspensions'
+                        #self.schedule['agenda']['suspensions'].append('')
+                    else: 
+                        self.current_agenda_subsection = 'other'
+                        #self.schedule['agenda']['other'].append('')
 
         # whatever the current schedule item, append the text to
         # it. if it was determined above to be a heading, then this
         # will be the first line for this item. else, it will just be
         # appended to the current item.
-        self.schedule['agenda']['items'][-1] += ' '+text
+        section = self.current_agenda_subsection
+        #self.schedule['agenda'][section][-1] += ' '+text
+        self.schedule['agenda'][section].append(text)
 
     def get_agenda(self):
-        self.schedule['agenda'] = {'announcements': [], 'items': [], 'footnotes': []}
+        self.schedule['agenda'] = {'announcements': [], 'suspensions': [], 'postponements': [], 'other': [], 'footnotes': []}
         agenda = (self.soup.table.findNext('tbody').findNext('tr').
                   findNext('td').findNext('div', unselectable="off"))
 
@@ -180,10 +196,19 @@ if __name__ == '__main__':
                 for item in v['announcements']:
                     print item
 
-            if v['items']:
-                print "========== Agenda Items ============"
-                for item in v['items']:
-                    print 'Item:'
+            if v['other']:
+                print "========== Other ============"
+                for item in v['other']:
+                    print '\t'+item
+
+            if v['suspensions']:
+                print "========== Suspensions ============"
+                for item in v['suspensions']:
+                    print '\t'+item
+
+            if v['postponements']:
+                print "========== Postponents ============"
+                for item in v['postponements']:
                     print '\t'+item
 
             if v['footnotes']:
