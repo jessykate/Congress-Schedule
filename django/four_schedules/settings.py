@@ -61,7 +61,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'four_schedules.front_end',
-    'four_schedules.parsers',
+    'four_schedules.scrapers',
 )
 
 try:
