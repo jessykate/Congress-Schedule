@@ -6,5 +6,4 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     url(r'^$', 'front_end.views.index', name='index'),
-
 )

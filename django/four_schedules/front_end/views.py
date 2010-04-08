@@ -4,9 +4,8 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from four_schedules.parsers.schedules import HouseFloorSchedule
-
+from four_schedules.parsers.schedules import HouseFloorSchedule, SenateFloorSchedule
 
 def index(request):
-    house_floor = HouseFloorSchedule().as_json()
-    return render_to_response('index.html', {'house_floor': house_floor})
+    senate_floor = SenateFloorSchedule().as_json()
+    return render_to_response('index.html', {'senate_floor': senate_floor})

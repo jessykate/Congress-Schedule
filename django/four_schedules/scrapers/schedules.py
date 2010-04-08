@@ -69,12 +69,14 @@ class HouseFloorSchedule(object):
         self.get_start_vote()
         self.get_end_vote()
         self.get_agenda()
+
         # pull out links to bills on thomas
         # (find links for opencongress?)
         # 
-        return self.schedule
+
 
     def as_json(self):
+	print self.parse()
         return json.dumps(self.parse())
 
     def get_html(self, date):
@@ -83,6 +85,7 @@ class HouseFloorSchedule(object):
         # the converEntities argument will turn html entities like
         # #&xxx; back into synbols.
         self.soup = BeautifulSoup(fp.read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        print self.soup
 
     def get_schedule_url(self, date):
         # call this url with the start parameter equal to the number of
@@ -99,9 +102,13 @@ class HouseFloorSchedule(object):
     def get_date(self):
         date_header = (self.soup.table.findNext('tbody').findNext('tr').
                        findNext('td').findNext('td').findNext('strong').text)
+
         # the date format seems to be fine for javascript parsers, so
         # leave it as it. eg. SATURDAY, MARCH 20, 2010
-        self.schedule['date'] = date_header.split('FLOOR SCHEDULE FOR ')[1]    
+        try:
+            self.schedule['date'] = date_header.split('FLOOR SCHEDULE FOR ')[1]    
+        except:
+            self.schedule['date'] = None
             
     def get_start_meet(self):
         self.schedule['start_meet'] = (self.soup.table.findNext('tbody').findNext('table').
