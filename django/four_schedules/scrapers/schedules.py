@@ -10,7 +10,29 @@ import urllib2, sys, re
 
 
 class SenateFloorSchedule(object):
-    pass
+    def __init__(self):
+        self.get_html()
+        
+    def get_html(self):
+        ''' get the html markup corresponding to the senate schedule'''
+        url = "http://www.senate.gov/pagelayout/legislative/d_three_sections_with_teasers/calendars.htm"
+        fp = urllib2.urlopen(url)
+        # the converEntities argument will turn html entities like
+        # #&xxx; back into synbols.
+        self.soup = BeautifulSoup(fp.read(), convertEntities=BeautifulSoup.HTML_ENTITIES)                
+    
+    def parse(self):
+        # get the first contentsubtitle, which is the current or
+        # upcoming schedule.
+        self.sched = {
+            'date' :  self.soup.find(attrs={'class':'contentsubtitle'}).findNext().text,
+            'agenda' : self.soup.find(attrs={'class':'contentsubtitle'}).findNext().findNext().text,
+            }
+        return self.sched
+
+    def as_json(self):
+        return json.dumps(self.parse())
+ 
 
 class HouseFloorSchedule(object):
     def __init__(self, date='today'):
@@ -185,6 +207,12 @@ def senate_committee_current():
     pass
 
 if __name__ == '__main__':
+    senate_sched = SenateFloorSchedule()
+    sched = senate_sched.as_json()
+    print 'Senate Floor Current Schedule\n'
+    print sched
+    print ""
+
     print 'House Floor Current Schedule\n'
     house_sched = HouseFloorSchedule("today")
     sched = house_sched.as_json()
@@ -218,3 +246,4 @@ if __name__ == '__main__':
 
         else:
             print v
+
