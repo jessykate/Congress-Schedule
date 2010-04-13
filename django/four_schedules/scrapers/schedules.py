@@ -31,8 +31,11 @@ class SenateFloorSchedule(object):
         return self.sched
 
     def as_json(self):
+        print self.parse
         return json.dumps(self.parse())
- 
+        
+    def as_dict(self):
+        return self.parse()
 
 class HouseFloorSchedule(object):
     def __init__(self, date='today'):
@@ -95,6 +98,8 @@ class HouseFloorSchedule(object):
         # pull out links to bills on thomas
         # (find links for opencongress?)
         # 
+        
+        return self.schedule
 
 
     def as_json(self):

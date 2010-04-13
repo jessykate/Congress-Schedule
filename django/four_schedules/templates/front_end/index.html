@@ -16,15 +16,11 @@
 	<div id="main">
 		<div id="house">
 			<div id="house_floor">
-			        <h3>Make this look Nice</h3>
-				{{ senate_floor }}
-				<ul id="house_floor_list">
-					<li>blah</li>
-					<li>blah</li>
-					<li>woop</li>
-					<li>woop</li>
-				</ul>
-			</div	
+				<h3>House Floor</h3>
+				<div id="house_floor_date">{{ house_floor.date }}</div>
+				<div id="house_floor_agenda">{{ house_floor }}</div>
+			</div>
+			<h3>House Committee</h3>
 			<div id="house_committee">
 				<ul id="house_committee_list">
 					<li>blah</li>
@@ -35,14 +31,12 @@
 			</div>
 		</div>
 		<div>
+			<h3>Senate Floor</h3>
 			<div id="senate_floor">
-				<ul id="senate_floor_list">
-					<li>blah</li>
-					<li>blah</li>
-					<li>woop</li>
-					<li>woop</li>				
-				</ul>
+				<div id="senate_floor_date">{{ senate_floor.date }}</div>
+				<div id="senate_floor_agenda">{{ senate_floor.agenda }}</div>
 			</div>
+			<h3>Senate Committee</h3>
 			<div id="senate_committee">
 				<ul id="senate_committee_list">
 					<li>blah</li>
