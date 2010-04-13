@@ -8,4 +8,4 @@ from four_schedules.scrapers.schedules import HouseFloorSchedule, SenateFloorSch
 def index(request):
     senate_floor = SenateFloorSchedule().as_json()
     house_floor = HouseFloorSchedule().as_json()
-    return render_to_response('front_end/index.html', {'senate_floor': senate_floor, 'house_floor', house_floor})
+    return render_to_response('front_end/index.html', {'senate_floor': senate_floor, 'house_floor':house_floor})
