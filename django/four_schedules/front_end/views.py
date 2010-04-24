@@ -6,9 +6,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from four_schedules.scrapers.schedules import (HouseFloorSchedule, 
                                                SenateFloorSchedule,
-                                               committee_schedule,
-                                               SenateCommitteeSchedule,
-                                               HouseCommitteeSchedule)
+                                               committee_schedule)
 
 def index(request):
     #Source Info
