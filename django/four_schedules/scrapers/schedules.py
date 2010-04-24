@@ -16,7 +16,19 @@ def committee_schedule(chamber):
     for event in collection.find({'chamber':chamber}).sort('meeting_date'):
         events.append(event)
     return events
-
+    
+def floor_schedule(chamber):
+    connection = Connection()
+    db = connection.schedules
+    
+    if chamber=="House":
+        collection = db.house_floor
+    else:
+        collection = db.senate_floor
+    
+    record = collection.find().sort('date')[0]
+    return record
+        
 class SenateFloorSchedule(object):
     def __init__(self):
         self.get_html()
