@@ -210,8 +210,9 @@ class HouseFloorSchedule(object):
 
     def get_agenda(self):
         self.schedule['agenda'] = {'announcements': [], 'suspensions': [], 'postponements': [], 'other': [], 'footnotes': []}
-        agenda = (self.soup.table.findNext('tbody').findNext('tr').
-                  findNext('td').findNext('div', unselectable="off"))
+
+        # this is hideous and wrong :)
+        agenda = self.soup.findAll('table')[3].findAll('td')[43]
 
         for line in agenda.findAll(text=True):   
             # normalize case and strip whitespace
