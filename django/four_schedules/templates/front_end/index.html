@@ -23,13 +23,11 @@
 			<h3>House Committee</h3>
 			<div id="house_committee">
 			  	<div id="house_cmte_agenda">
-				  {{ house_smte }}
 				</div>
 				<ul id="house_committee_list">
-					<li>blah</li>
-					<li>blah</li>
-					<li>woop</li>
-					<li>woop</li>
+					{%for event in house_cmte %}
+					<li>{{ event }}</li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>
@@ -42,13 +40,11 @@
 			<h3>Senate Committee</h3>
 			<div id="senate_committee">
 			  	<div id="senate_cmte_agenda">
-				  {{ senate_cmte }}
 				</div>
 				<ul id="senate_committee_list">
-					<li>blah</li>
-					<li>blah</li>
-					<li>woop</li>
-					<li>woop</li>				
+					{% for event in senate_cmte %}
+					<li>{{ event }}</li>
+					{% endfor %}				
 				</ul>
 			</div>
 		</div>
