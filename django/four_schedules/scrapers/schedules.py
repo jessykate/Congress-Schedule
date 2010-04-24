@@ -7,6 +7,15 @@ try:
     import json
 except:
     import simplejson as json
+    
+def committee_schedule(chamber):
+    connection = Connection()
+    db = connection.schedules
+    collection = db.committee_hearing
+    events = []
+    for event in collection.find({'chamber':chamber}).sort('meeting_date'):
+        events.append(event)
+    return events
 
 class SenateFloorSchedule(object):
     def __init__(self):
