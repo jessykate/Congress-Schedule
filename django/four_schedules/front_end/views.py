@@ -4,11 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from four_schedules.scrapers.schedules import (HouseFloorSchedule, 
-                                               SenateFloorSchedule,
-                                               committee_schedule,
-                                               SenateCommitteeSchedule,
-                                               HouseCommitteeSchedule)
+from four_schedules.scrapers.schedules import (floor_schedule,
+                                               committee_schedule)
 
 def index(request):
     #Source Info
@@ -18,8 +15,8 @@ def index(request):
     house_cmte_url = "http://www.house.gov/daily/comlist.html"
     
     #Event Schedules
-    senate_floor_events = SenateFloorSchedule().parse()
-    house_floor_events = HouseFloorSchedule().parse()
+    senate_floor_events = floor_schedule('Senate')
+    house_floor_events = floor_schedule('House')
     senate_cmte_events = committee_schedule('Senate')
     house_cmte_events = committee_schedule('House')
     
