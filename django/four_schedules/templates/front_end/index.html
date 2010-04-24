@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
 	<title>Daily Schedules from Congress - Four Schedules</title>
-	<link rel="stylesheet" href="http://assets.fourschedules.com.s3.amazonaws.com/v1/css/styles.css" type="text/css" media="screen" /> 
-
+	<link rel="stylesheet" href="/media/css/styles.css" type="text/css" /> 
 </head>
 <body>
 	<div id="header">
@@ -13,42 +12,56 @@
 		</div>
 	</div>
 	<div id="headerborder"></div> 
+
 	<div id="main">
-		<div id="house">
-			<div id="house_floor">
-			<h3><a href="{{ house_floor.url }}">House Floor</a></h3>
-				<div id="house_floor_date">{{ house_floor.events.date }}</div>
-				<div id="house_floor_agenda">{{ house_floor.events }}</div>
-			</div>
-			<h3><a href="{{ house_cmte.url }}">House Committee</a></h3>
-			<div id="house_committee">
-			  	<div id="house_cmte_agenda">
-				</div>
-				<ul id="house_committee_list">
-					{%for event in house_cmte.events %}
-					<li>{{ event }}</li>
-					{% endfor %}
-				</ul>
-			</div>
-		</div>
-		<div>
-			<h3><a href="{{ senate_floor_source }}">Senate Floor</a></h3>
-			<div id="senate_floor">
-				<div id="senate_floor_date">{{ senate_floor.events.date }}</div>
-				<div id="senate_floor_agenda">{{ senate_floor.events.agenda }}</div>
-			</div>
-			<h3><a href="{{ senate_cmte.url }}">Senate Committee</a></h3>
-			<div id="senate_committee">
-			  	<div id="senate_cmte_agenda">
-				</div>
-				<ul id="senate_committee_list">
-					{% for event in senate_cmte.events %}
-					<li>{{ event }}</li>
-					{% endfor %}				
-				</ul>
-			</div>
-		</div>
-	</div>
+
+	  <div class="column" id="house_floor">
+	    <h3><a href="{{ house_floor.url }}">House Floor</a></h3>
+	    <div id="house_floor_date">{{ house_floor.events.date }}</div>
+	    <div id="house_floor_times">
+	      Meeting Starts: {{ house_floor.events.start_meet }}<br>
+		Voting: {{ house_floor.events.start_vote }} to
+		{{ house_floor.events.end_vote }}
+	      </div>
+	      {% for title, items in house_floor.events.items %}
+	      <h3>{{ title }}</h3>
+	      <div>{{ items }}</div>
+	      {% endfor %}
+	      <div id="house_floor_agenda">{{ house_floor.events }}</div>
+	    </div>
+	  
+
+	  <div class="column" id="house_committee">
+	    <h3><a href="{{ house_cmte.url }}">House Committee</a></h3>
+	    <div id="house_cmte_agenda">
+	    </div>
+	    <ul id="house_committee_list">
+	      {%for event in house_cmte.events %}
+	      <li>{{ event }}</li>
+	      {% endfor %}
+	    </ul>
+	  </div>
+	  
+	  
+	  <div class="column" id="senate_floor">
+	    <h3><a href="{{ senate_floor_source }}">Senate Floor</a></h3>
+	    <div id="senate_floor_date">{{ senate_floor.events.date }}</div>
+	    <div id="senate_floor_agenda">{{ senate_floor.events.agenda }}</div>
+	  </div>
+	  
+	  <div class="column" id="senate_committee">
+	    <h3><a href="{{ senate_cmte.url }}">Senate Committee</a></h3>
+	    <div id="senate_cmte_agenda">
+	    </div>
+	    <ul id="senate_committee_list">
+	      {% for event in senate_cmte.events %}
+	      <li>{{ event }}</li>
+	      {% endfor %}				
+	    </ul>
+	  </div>
+	  
+	</div> <!-- end main -->
+
 	<script type="text/javascript" src="http://assets.fourschedules.com.s3.amazonaws.com/v1/js/fs.js" />
 	<script type="text/javascript" src="http://assets.fourschedules.com.s3.amazonaws.com/v1/js/jquery-1.4.2.min.js" />
 </body>

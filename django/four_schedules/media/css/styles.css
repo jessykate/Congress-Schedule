@@ -1,0 +1,32 @@
+// four main columns
+body {
+    width: 1000px;
+    margin: auto;
+    font-size: 10px;
+}
+
+.column {
+    float: left;
+    width: 225px;
+    margin-right: 20px;
+    padding-right: 5px;
+}
+
+#house_floor {
+        
+}
+
+#senate_floor {
+    
+}
+
+#house_committee {
+    
+}
+
+#senate_committee {
+    
+}
+
+
+
