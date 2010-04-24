@@ -8,36 +8,6 @@ try:
 except:
     import simplejson as json
 
-<<<<<<< HEAD:django/four_schedules/scrapers/schedules.py
-from BeautifulSoup import BeautifulSoup
-import urllib2, sys, re
-=======
-
-class SenateCommitteeSchedule(object):
-    def parse(self):
-        fp = urllib2.urlopen("http://realtimecongress.org/hearings_upcoming.json?chamber=Senate")
-        # format is already in json string. 
-        js = fp.read()
-        return json.loads(js)
-
-class HouseCommitteeSchedule(object):
-    def parse(self):
-        fp = urllib2.urlopen("http://realtimecongress.org/hearings_upcoming.json?chamber=House")
-        # format is already in json string. 
-        js = fp.read()
-        return json.loads(js)
-
-def committee_schedule(chamber):
-    connection = Connection()
-    db = connection.schedules
-    collection = db.committee_hearing
-    events = []
-    for event in collection.find({'chamber':chamber}).sort('meeting_date'):
-        events.append(event)
-    return events                                  
-
->>>>>>> 0e0ca205a64127468be918aaef2808ffe792b74d:django/four_schedules/scrapers/schedules.py
-
 class SenateFloorSchedule(object):
     def __init__(self):
         self.get_html()
