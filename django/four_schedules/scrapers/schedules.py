@@ -1,4 +1,3 @@
-
 #!/usr/bin/python
 
 try:
@@ -8,21 +7,6 @@ except:
 
 from BeautifulSoup import BeautifulSoup
 import urllib2, sys, re
-
-
-class SenateCommitteeSchedule(object):
-    def parse(self):
-        fp = urllib2.urlopen("http://realtimecongress.org/hearings_upcoming.json?chamber=Senate")
-        # format is already in json string. 
-        js = fp.read()
-        return json.loads(js)
-
-class HouseCommitteeSchedule(object):
-    def parse(self):
-        fp = urllib2.urlopen("http://realtimecongress.org/hearings_upcoming.json?chamber=House")
-        # format is already in json string. 
-        js = fp.read()
-        return json.loads(js)
 
 class SenateFloorSchedule(object):
     def __init__(self):
