@@ -10,29 +10,37 @@ from four_schedules.scrapers.schedules import (HouseFloorSchedule,
                                                HouseCommitteeSchedule)
 from pymongo import Connection
 
-
 def committee_schedule(chamber):
     connection = Connection()
     db = connection.schedules
     collection = db.committee_hearing
     events = []
-    for event in collection.find({'chamber':chamber}):
+    for event in collection.find({'chamber':chamber}).sort('meeting_date'):
         events.append(event)
     return events                                  
 
 def index(request):
+    #Source Info
     house_floor_url = "http://majorityleader.gov/links_and_resources/whip_resources/currentdailyleader.cfm"
     senate_floor_url = "http://www.senate.gov/pagelayout/legislative/d_three_sections_with_teasers/calendars.htm"
-    senate_floor = SenateFloorSchedule().parse()
-    house_floor = HouseFloorSchedule().parse()
-    senate_cmte = committee_schedule('Senate')
-    house_cmte = committee_schedule('House')
+    senate_cmte_url = "http://www.senate.gov/pagelayout/committees/one_item_and_teasers/committee_hearings.htm"
+    house_cmte_url = "http://www.house.gov/daily/comlist.html"
+    
+    #Event Schedules
+    senate_floor_events = SenateFloorSchedule().parse()
+    house_floor_events = None #HouseFloorSchedule().parse()
+    senate_cmte_events = committee_schedule('Senate')
+    house_cmte_events = committee_schedule('House')
+    
+    house_floor = {'url':house_floor_url, 'events':house_floor_events}
+    senate_floor = {'url':senate_floor_url, 'events':senate_floor_events}
+    senate_cmte = {'url':senate_cmte_url, 'events':senate_cmte_events}
+    house_cmte = {'url':house_cmte_url, 'events':house_cmte_events}
+
     return render_to_response('front_end/index.html', 
                               {'senate_floor': senate_floor, 
                                'house_floor': house_floor,
                                'senate_cmte': senate_cmte,
                                'house_cmte': house_cmte,
-                               'house_floor_source': house_floor_url,
-                               'senate_floor_source': senate_floor_url,
                                }
                               )
