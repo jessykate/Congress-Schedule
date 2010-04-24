@@ -1,12 +1,42 @@
 #!/usr/bin/python
 
+from BeautifulSoup import BeautifulSoup
+import urllib2, sys, re
+from pymongo import Connection
 try:
     import json
 except:
     import simplejson as json
 
+<<<<<<< HEAD:django/four_schedules/scrapers/schedules.py
 from BeautifulSoup import BeautifulSoup
 import urllib2, sys, re
+=======
+
+class SenateCommitteeSchedule(object):
+    def parse(self):
+        fp = urllib2.urlopen("http://realtimecongress.org/hearings_upcoming.json?chamber=Senate")
+        # format is already in json string. 
+        js = fp.read()
+        return json.loads(js)
+
+class HouseCommitteeSchedule(object):
+    def parse(self):
+        fp = urllib2.urlopen("http://realtimecongress.org/hearings_upcoming.json?chamber=House")
+        # format is already in json string. 
+        js = fp.read()
+        return json.loads(js)
+
+def committee_schedule(chamber):
+    connection = Connection()
+    db = connection.schedules
+    collection = db.committee_hearing
+    events = []
+    for event in collection.find({'chamber':chamber}).sort('meeting_date'):
+        events.append(event)
+    return events                                  
+
+>>>>>>> 0e0ca205a64127468be918aaef2808ffe792b74d:django/four_schedules/scrapers/schedules.py
 
 class SenateFloorSchedule(object):
     def __init__(self):
@@ -194,8 +224,9 @@ class HouseFloorSchedule(object):
 
     def get_agenda(self):
         self.schedule['agenda'] = {'announcements': [], 'suspensions': [], 'postponements': [], 'other': [], 'footnotes': []}
-        agenda = (self.soup.table.findNext('tbody').findNext('tr').
-                  findNext('td').findNext('div', unselectable="off"))
+
+        # this is hideous and wrong :)
+        agenda = self.soup.findAll('table')[3].findAll('td')[43]
 
         for line in agenda.findAll(text=True):   
             # normalize case and strip whitespace
@@ -206,14 +237,7 @@ class HouseFloorSchedule(object):
                     self.add_to_agenda_item(line, text)
 
 
-def senate_floor_current():
-    pass
 
-def house_committee_current():
-    pass
-
-def senate_committee_current():
-    pass
 
 if __name__ == '__main__':
     senate_sched = SenateFloorSchedule()

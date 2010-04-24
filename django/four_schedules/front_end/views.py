@@ -6,18 +6,9 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from four_schedules.scrapers.schedules import (HouseFloorSchedule, 
                                                SenateFloorSchedule,
+                                               committee_schedule,
                                                SenateCommitteeSchedule,
                                                HouseCommitteeSchedule)
-from pymongo import Connection
-
-def committee_schedule(chamber):
-    connection = Connection()
-    db = connection.schedules
-    collection = db.committee_hearing
-    events = []
-    for event in collection.find({'chamber':chamber}).sort('meeting_date'):
-        events.append(event)
-    return events                                  
 
 def index(request):
     #Source Info
@@ -28,7 +19,7 @@ def index(request):
     
     #Event Schedules
     senate_floor_events = SenateFloorSchedule().parse()
-    house_floor_events = None #HouseFloorSchedule().parse()
+    house_floor_events = HouseFloorSchedule().parse()
     senate_cmte_events = committee_schedule('Senate')
     house_cmte_events = committee_schedule('House')
     
