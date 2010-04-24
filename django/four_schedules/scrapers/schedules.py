@@ -1,13 +1,13 @@
 
 #!/usr/bin/python
 
+from BeautifulSoup import BeautifulSoup
+import urllib2, sys, re
+from pymongo import Connection
 try:
     import json
 except:
     import simplejson as json
-
-from BeautifulSoup import BeautifulSoup
-import urllib2, sys, re
 
 
 class SenateCommitteeSchedule(object):
@@ -23,6 +23,16 @@ class HouseCommitteeSchedule(object):
         # format is already in json string. 
         js = fp.read()
         return json.loads(js)
+
+def committee_schedule(chamber):
+    connection = Connection()
+    db = connection.schedules
+    collection = db.committee_hearing
+    events = []
+    for event in collection.find({'chamber':chamber}).sort('meeting_date'):
+        events.append(event)
+    return events                                  
+
 
 class SenateFloorSchedule(object):
     def __init__(self):
@@ -223,14 +233,7 @@ class HouseFloorSchedule(object):
                     self.add_to_agenda_item(line, text)
 
 
-def senate_floor_current():
-    pass
 
-def house_committee_current():
-    pass
-
-def senate_committee_current():
-    pass
 
 if __name__ == '__main__':
     senate_sched = SenateFloorSchedule()
