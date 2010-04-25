@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from BeautifulSoup import BeautifulSoup
-import urllib2, sys, re
+import datetime, time, urllib2, sys, re
 from pymongo import Connection
 try:
     import json
@@ -48,6 +48,7 @@ class SenateFloorSchedule(object):
             'date' :  self.soup.find(attrs={'class':'contentsubtitle'}).findNext().text,
             'agenda' : self.soup.find(attrs={'class':'contentsubtitle'}).findNext().findNext().text,
             }
+        self.sched['date'] = datetime.datetime(*time.strptime(self.sched['date'], "%A, %b %d, %Y")[0:6])
         return self.sched
 
     def as_json(self):
@@ -109,7 +110,7 @@ class HouseFloorSchedule(object):
             'end_vote': None,
             'agenda': None        
             }
-        self.get_date()
+        self.get_date()        
         self.get_start_meet()
         self.get_start_vote()
         self.get_end_vote()
@@ -148,10 +149,9 @@ class HouseFloorSchedule(object):
         date_header = (self.soup.table.findNext('tbody').findNext('tr').
                        findNext('td').findNext('td').findNext('strong').text)
 
-        # the date format seems to be fine for javascript parsers, so
-        # leave it as it. eg. SATURDAY, MARCH 20, 2010
         try:
             self.schedule['date'] = date_header.split('FLOOR SCHEDULE FOR ')[1]    
+            self.schedule['date'] = datetime.datetime(*time.strptime(self.schedule['date'], "%A, %B %d, %Y")[0:6])
         except:
             self.schedule['date'] = None
             
